@@ -154,6 +154,7 @@ class AdminPanelController extends Controller
     public function showIMEI($id)
     {
         $user = User::findOrFail($id);
+        $devices = $user->devices()->get();
         return view('gps.addNewGPS',compact('user','devices'));
     }
 
@@ -174,7 +175,7 @@ class AdminPanelController extends Controller
         $users = User::all();
         return Datatables::of($users)
             ->addColumn('action', function ($data) {
-                return "<a class='btn btn-success' href='/users/viewuser/$data->id'>View</a>";
+                return "<a class='btn btn-success' href='/users/viewuser/$data->id'>View</a> &nbsp;<a class='btn btn-info' href='/imei/add/$data->id'>Add GPS</a>";
             })
             ->editColumn('created_at',function($data){
                 return \Carbon\Carbon::createFromTimeStamp(strtotime($data->created_at))->diffForHumans();
